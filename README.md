@@ -1,4 +1,4 @@
-<a href="https://xela-kp.github.io/"><img src="/images/banner.png" width="100%" height="auto"/></a>
+[<a href="https://xela-kp.github.io/"><img src="/images/banner.png" width="100%" height="auto"/></a>]: #
 <p align="center">
   <a href="https://www.linkedin.com/in/perocho-xela/"><img width="32px" alt="LinkedIn" title="LinkedIn" src="/images/linkedin.png"></a>
   &#8287;&#8287;&#8287;&#8287;&#8287;
