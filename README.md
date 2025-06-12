@@ -1,4 +1,3 @@
-[<a href="https://perochoa.github.io/"><img src="/images/banner.png" width="100%" height="auto"/></a>]: #
 <p align="center">
   <a href="https://www.linkedin.com/in/perocho-xela/"><img width="32px" alt="LinkedIn" title="LinkedIn" src="/images/linkedin.png"></a>
   &#8287;&#8287;&#8287;&#8287;&#8287;
@@ -7,28 +6,19 @@
 
 <br/>
 
-<p>
-  
-Hello stranger! Welcome to my corner of GitHub. I'm Alex: an aspiring full-stack develpoer.
-
-<div>
-<details>
-  <summary>🧑 More about me</summary>
-
-- 🔭 I’m currently on a journey to build a **web-based OS**
-
-- 🌱 I’m currently learning **something?**
-
-- 📫 Email me at **<perocho.xela@gmail.com>**
-
-</details>
-  
+<p> Hi! I'm alex, welcome to my GitHub!
+  <div>
+    <details>
+      <summary>🧑 More about me</summary>
+    - 🔭 I’m currently on a journey to build a **web-based OS**
+    - 🌱 I’m currently learning **something?**
+    - 📫 Email me at **<perocho.xela@gmail.com>**
+    </details>
+  </div>
 </p>
 
 
 ## 🔥 Github Stats
-
-<img align="right" width="38%" src="/images/nanami.jpg"/>
 
 <a href="https://github.com/perochoa"><img width="50%" src="https://github-readme-stats.vercel.app/api?username=perochoa&theme=radical&title_color=ff3068%253F"></a>
 <a href="https://github.com/perochoa"><img width="50%" src="https://github-readme-streak-stats.herokuapp.com/?user=perochoa&theme=radical&date_format=M%20j%5B,%20Y%5D&ring=ff3068&fire=ff3068&sideNums=ff3068"></a>
