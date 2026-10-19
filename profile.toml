@@ -127,8 +127,8 @@ blurb = "Flutter trail app for a 10,000+ resident community: 2,700+ downloads an
 # Bullets under the timeline; markdown is fine here.
 [timeline]
 highlights = [
-  "🏆 [CARFAX Intern Spotlight](https://www.linkedin.com/feed/update/urn:li:activity:7422348823395647488/)",
-  "🎤 [Beyond Autocomplete](https://github.com/perochoa/CSUS_Claude_Code_Workshop_2026): the Claude Code workshop I wrote for CSUS",
+  "[CARFAX Intern Spotlight](https://www.linkedin.com/feed/update/urn:li:activity:7422348823395647488/)",
+  "[Beyond Autocomplete](https://github.com/perochoa/CSUS_Claude_Code_Workshop_2026), the Claude Code workshop I wrote for CSUS",
 ]
 
 # Badges use shields.io + simple-icons slugs (https://simpleicons.org). `url` makes a badge a link.

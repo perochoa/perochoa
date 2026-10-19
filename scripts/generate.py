@@ -413,7 +413,7 @@ def stats_card(cfg: dict, s: dict, theme: str) -> str:
         ("stars earned", compact(s["stars"]), "all repos"),
         ("followers", compact(s["followers"]), f"{s['repos']} public repos"),
     ]
-    body = [card_frame(p, w, h, "by the numbers", "▲")]
+    body = [card_frame(p, w, h, "github stats", "▲")]
     for i, (label, value, sub) in enumerate(metrics):
         col, row = i % 2, i // 2
         x, y = 24 + col * 145, 76 + row * 46
