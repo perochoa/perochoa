@@ -1,0 +1,66 @@
+name: profile
+
+# Cards and the snake are pushed to the orphan `output` branch, which README.md reads from raw.githubusercontent.com.
+# Nothing here commits to main.
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: profile-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  readme:
+    name: readme is in sync with profile.toml
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - run: python scripts/generate.py --check
+
+  cards:
+    name: draw cards
+    if: github.event_name != 'pull_request'
+    needs: readme
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      # PROFILE_TOKEN (a PAT with read:user) is optional; it lets private contributions count toward the totals.
+      - name: generate cards
+        run: python scripts/generate.py --out dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROFILE_TOKEN || github.token }}
+
+      - name: generate snake
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/snake-dark.svg?color_snake=#ff3068&color_dots=#21262d,#3b1450,#5c1f80,#8b21b5,#ff3068&color_background=transparent
+            dist/snake-light.svg?color_snake=#8b21b5&color_dots=#ebedf0,#e3c4ef,#c58ae0,#8b21b5,#ff3068&color_background=transparent
+
+      - name: push to output branch
+        working-directory: dist
+        run: |
+          rm -f data.json preview.html
+          git init -q -b output
+          git add .
+          git -c user.name=github-actions[bot] -c user.email=41898282+github-actions[bot]@users.noreply.github.com \
+            commit -q -m "refresh profile cards"
+          git push -fq "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" output
