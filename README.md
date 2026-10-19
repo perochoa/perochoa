@@ -7,8 +7,8 @@
 
 <a href="https://perochoa.github.io/portfolio/"><img alt="hello world" src="https://raw.githubusercontent.com/perochoa/perochoa/output/hero.svg" width="100%"></a>
 
-<a href="https://perochoa.github.io/portfolio/"><img alt="Portfolio" src="https://img.shields.io/badge/Portfolio-8b21b5?style=for-the-badge&logo=googlechrome&logoColor=white"></a>
-<a href="https://www.linkedin.com/in/perocho-xela/"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-0a66c2?style=for-the-badge&logo=linkedin&logoColor=white"></a>
+<a href="https://perochoa.github.io/portfolio/"><img alt="Portfolio" src="https://img.shields.io/badge/Portfolio-8b21b5?style=for-the-badge&logo=astro&logoColor=white"></a>
+<a href="https://www.linkedin.com/in/aperocho/"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-0a66c2?style=for-the-badge&logo=linkedin&logoColor=white"></a>
 <a href="https://www.instagram.com/perocho.xela/"><img alt="Instagram" src="https://img.shields.io/badge/Instagram-e4405f?style=for-the-badge&logo=instagram&logoColor=white"></a>
 <a href="mailto:perocho.xela@gmail.com"><img alt="Email" src="https://img.shields.io/badge/Email-ea4335?style=for-the-badge&logo=gmail&logoColor=white"></a>
 <a href="https://github.com/perochoa?tab=followers"><img alt="followers" src="https://img.shields.io/github/followers/perochoa?style=for-the-badge&logo=github&label=follow&color=161b22"></a>
@@ -17,13 +17,15 @@
 
 ```console
 $ whoami
-alex perocho, mississauga, on
+alex perocho, london, on
 
 $ cat ~/.now
-building: a UCI chess engine in C++ and a gRPC telemetry service in C#
-learning: systems design, and how to make agents do the boring parts
-organizing: the CSUS Claude Code Workshop 2026
-ask me about: dotfiles, neovim, or why the banner says i'm confused
+day job: ml platform engineer @ mobility global (s&p global)
+on my plate: sla alerting for 20+ triton models, telemetry on envoy ai gateway
+school: b.sc. computer science @ western, graduating dec 2026
+side quest: vp @ western csus, running workshops (the claude code one is mine)
+offline: marathon training, xc mountain biking, guitar (badly)
+ask me about: grafana multi-tenancy, kubelet eviction, or my dotfiles
 ```
 
 ## 📊 by the numbers
@@ -37,26 +39,46 @@ ask me about: dotfiles, neovim, or why the banner says i'm confused
 
 </div>
 
+## 🧭 where i've been
+
+<div align="center">
+
+<a href="https://www.linkedin.com/in/aperocho/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/experience-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/experience-light.svg"><img alt="experience timeline" src="https://raw.githubusercontent.com/perochoa/perochoa/output/experience-dark.svg" width="100%"></picture></a>
+
+</div>
+
+- 🏆 [CARFAX Intern Spotlight](https://www.linkedin.com/feed/update/urn:li:activity:7422348823395647488/)
+- 🎤 [Beyond Autocomplete](https://github.com/perochoa/CSUS_Claude_Code_Workshop_2026): the Claude Code workshop I wrote for CSUS
+
 ## 🛠️ things i've built
 
 <div align="center">
 
-<a href="https://github.com/perochoa/CSUS_Claude_Code_Workshop_2026"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-csus-claude-code-workshop-2026-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-csus-claude-code-workshop-2026-light.svg"><img alt="CSUS_Claude_Code_Workshop_2026" src="https://raw.githubusercontent.com/perochoa/perochoa/output/project-csus-claude-code-workshop-2026-dark.svg" width="49%"></picture></a> <a href="https://github.com/perochoa/CPPChess"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-cppchess-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-cppchess-light.svg"><img alt="CPPChess" src="https://raw.githubusercontent.com/perochoa/perochoa/output/project-cppchess-dark.svg" width="49%"></picture></a>
-<a href="https://github.com/perochoa/TelemetryMicroservice"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-telemetrymicroservice-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-telemetrymicroservice-light.svg"><img alt="TelemetryMicroservice" src="https://raw.githubusercontent.com/perochoa/perochoa/output/project-telemetrymicroservice-dark.svg" width="49%"></picture></a> <a href="https://github.com/perochoa/fomo"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-fomo-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-fomo-light.svg"><img alt="fomo" src="https://raw.githubusercontent.com/perochoa/perochoa/output/project-fomo-dark.svg" width="49%"></picture></a>
-<a href="https://github.com/perochoa/TaskManager"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-taskmanager-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-taskmanager-light.svg"><img alt="TaskManager" src="https://raw.githubusercontent.com/perochoa/perochoa/output/project-taskmanager-dark.svg" width="49%"></picture></a> <a href="https://github.com/perochoa/dotfiles"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-dotfiles-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-dotfiles-light.svg"><img alt="dotfiles" src="https://raw.githubusercontent.com/perochoa/perochoa/output/project-dotfiles-dark.svg" width="49%"></picture></a>
+<a href="https://github.com/perochoa/CSUS_Claude_Code_Workshop_2026"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-csus-claude-code-workshop-2026-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-csus-claude-code-workshop-2026-light.svg"><img alt="CSUS_Claude_Code_Workshop_2026" src="https://raw.githubusercontent.com/perochoa/perochoa/output/project-csus-claude-code-workshop-2026-dark.svg" width="49%"></picture></a> <a href="https://github.com/perochoa/dotfiles"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-dotfiles-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-dotfiles-light.svg"><img alt="dotfiles" src="https://raw.githubusercontent.com/perochoa/perochoa/output/project-dotfiles-dark.svg" width="49%"></picture></a>
+<a href="https://github.com/perochoa/perochoa"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-perochoa-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-perochoa-light.svg"><img alt="perochoa" src="https://raw.githubusercontent.com/perochoa/perochoa/output/project-perochoa-dark.svg" width="49%"></picture></a> <a href="https://github.com/perochoa/portfolio"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-portfolio-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-portfolio-light.svg"><img alt="portfolio" src="https://raw.githubusercontent.com/perochoa/perochoa/output/project-portfolio-dark.svg" width="49%"></picture></a>
+<a href="https://github.com/perochoa/CPPChess"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-cppchess-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-cppchess-light.svg"><img alt="CPPChess" src="https://raw.githubusercontent.com/perochoa/perochoa/output/project-cppchess-dark.svg" width="49%"></picture></a> <a href="https://github.com/perochoa/TelemetryMicroservice"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-telemetrymicroservice-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/perochoa/perochoa/output/project-telemetrymicroservice-light.svg"><img alt="TelemetryMicroservice" src="https://raw.githubusercontent.com/perochoa/perochoa/output/project-telemetrymicroservice-dark.svg" width="49%"></picture></a>
 
 </div>
 
 ## 🧰 stack
 
 <p><b>languages</b><br/>
-<img alt="C#" src="https://img.shields.io/badge/C%23-512bd4?style=flat-square&logo=dotnet&logoColor=white"> <img alt="C++" src="https://img.shields.io/badge/C%2B%2B-00599c?style=flat-square&logo=cplusplus&logoColor=white"> <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178c6?style=flat-square&logo=typescript&logoColor=white"> <img alt="Python" src="https://img.shields.io/badge/Python-3776ab?style=flat-square&logo=python&logoColor=white"> <img alt="Java" src="https://img.shields.io/badge/Java-ea2d2e?style=flat-square&logo=openjdk&logoColor=white"> <img alt="Swift" src="https://img.shields.io/badge/Swift-f05138?style=flat-square&logo=swift&logoColor=white"></p>
+<img alt="Python" src="https://img.shields.io/badge/Python-3776ab?style=flat-square&logo=python&logoColor=white"> <img alt="Go" src="https://img.shields.io/badge/Go-00add8?style=flat-square&logo=go&logoColor=white"> <img alt="C++" src="https://img.shields.io/badge/C%2B%2B-00599c?style=flat-square&logo=cplusplus&logoColor=white"> <img alt="Terraform (HCL)" src="https://img.shields.io/badge/Terraform%20%28HCL%29-844fba?style=flat-square&logo=terraform&logoColor=white"> <img alt="SQL" src="https://img.shields.io/badge/SQL-4169e1?style=flat-square&logo=postgresql&logoColor=white"> <img alt="PromQL" src="https://img.shields.io/badge/PromQL-e6522c?style=flat-square&logo=prometheus&logoColor=white"> <img alt="Bash" src="https://img.shields.io/badge/Bash-4eaa25?style=flat-square&logo=gnubash&logoColor=white"></p>
 
-<p><b>frameworks</b><br/>
-<img alt="ASP.NET Core" src="https://img.shields.io/badge/ASP.NET%20Core-512bd4?style=flat-square&logo=dotnet&logoColor=white"> <img alt=".NET MAUI" src="https://img.shields.io/badge/.NET%20MAUI-512bd4?style=flat-square&logo=dotnet&logoColor=white"> <img alt="React" src="https://img.shields.io/badge/React-087ea4?style=flat-square&logo=react&logoColor=white"> <img alt="Next.js" src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white"> <img alt="Node.js" src="https://img.shields.io/badge/Node.js-5fa04e?style=flat-square&logo=nodedotjs&logoColor=white"> <img alt="gRPC" src="https://img.shields.io/badge/gRPC-244c5a?style=flat-square&logo=trpc&logoColor=white"></p>
+<p><b>infrastructure</b><br/>
+<img alt="Kubernetes (EKS)" src="https://img.shields.io/badge/Kubernetes%20%28EKS%29-326ce5?style=flat-square&logo=kubernetes&logoColor=white"> <img alt="AWS" src="https://img.shields.io/badge/AWS-ff9900?style=flat-square"> <img alt="Karpenter" src="https://img.shields.io/badge/Karpenter-232f3e?style=flat-square"> <img alt="Argo CD" src="https://img.shields.io/badge/Argo%20CD-ef7b4d?style=flat-square&logo=argo&logoColor=white"> <img alt="Helm" src="https://img.shields.io/badge/Helm-0f1689?style=flat-square&logo=helm&logoColor=white"> <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ed?style=flat-square&logo=docker&logoColor=white"></p>
 
-<p><b>tools</b><br/>
-<img alt="Neovim" src="https://img.shields.io/badge/Neovim-57a143?style=flat-square&logo=neovim&logoColor=white"> <img alt="Git" src="https://img.shields.io/badge/Git-f05032?style=flat-square&logo=git&logoColor=white"> <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ed?style=flat-square&logo=docker&logoColor=white"> <img alt="AWS" src="https://img.shields.io/badge/AWS-232f3e?style=flat-square&logo=amazonwebservices&logoColor=white"> <img alt="Claude Code" src="https://img.shields.io/badge/Claude%20Code-d97757?style=flat-square&logo=claude&logoColor=white"></p>
+<p><b>observability</b><br/>
+<img alt="Grafana" src="https://img.shields.io/badge/Grafana-f46800?style=flat-square&logo=grafana&logoColor=white"> <img alt="Prometheus" src="https://img.shields.io/badge/Prometheus-e6522c?style=flat-square&logo=prometheus&logoColor=white"> <img alt="Mimir · Loki · Tempo" src="https://img.shields.io/badge/Mimir%20%C2%B7%20Loki%20%C2%B7%20Tempo-3a3a3a?style=flat-square&logo=grafana&logoColor=white"> <img alt="Alloy" src="https://img.shields.io/badge/Alloy-f46800?style=flat-square&logo=grafana&logoColor=white"> <img alt="OpenTelemetry" src="https://img.shields.io/badge/OpenTelemetry-425cc7?style=flat-square&logo=opentelemetry&logoColor=white"> <img alt="PagerDuty" src="https://img.shields.io/badge/PagerDuty-06ac38?style=flat-square&logo=pagerduty&logoColor=white"></p>
+
+<p><b>ml platform</b><br/>
+<img alt="NVIDIA Triton" src="https://img.shields.io/badge/NVIDIA%20Triton-76b900?style=flat-square&logo=nvidia&logoColor=white"> <img alt="MLflow" src="https://img.shields.io/badge/MLflow-0194e2?style=flat-square&logo=mlflow&logoColor=white"> <img alt="Flyte" src="https://img.shields.io/badge/Flyte-6f2aef?style=flat-square"> <img alt="JupyterHub" src="https://img.shields.io/badge/JupyterHub-f37626?style=flat-square&logo=jupyter&logoColor=white"></p>
+
+<p><b>daily drivers</b><br/>
+<img alt="Neovim" src="https://img.shields.io/badge/Neovim-57a143?style=flat-square&logo=neovim&logoColor=white"> <img alt="Ghostty" src="https://img.shields.io/badge/Ghostty-3551f3?style=flat-square&logo=ghostty&logoColor=white"> <img alt="Claude Code" src="https://img.shields.io/badge/Claude%20Code-d97757?style=flat-square&logo=claude&logoColor=white"> <img alt="Git" src="https://img.shields.io/badge/Git-f05032?style=flat-square&logo=git&logoColor=white"></p>
+
+<p><b>certifications</b><br/>
+<a href="https://www.credly.com/badges/8a05268a-9ef4-401c-a40d-7a0e3ed6aa8d/public_url"><img alt="AWS Cloud Practitioner" src="https://img.shields.io/badge/AWS%20Cloud%20Practitioner-ff6b00?style=flat-square&logo=credly&logoColor=white"></a> <a href="https://www.credly.com/badges/bfaf81ab-2ab2-49be-a9d3-e16a452f552d/public_url"><img alt="IBM Z Intermediate" src="https://img.shields.io/badge/IBM%20Z%20Intermediate-1f70c1?style=flat-square&logo=credly&logoColor=white"></a> <a href="https://www.credly.com/badges/fa4e0f98-eb48-4086-adbd-65791403c28f/public_url"><img alt="IBM Z Advanced" src="https://img.shields.io/badge/IBM%20Z%20Advanced-1f70c1?style=flat-square&logo=credly&logoColor=white"></a> <img alt="AWS Solutions Architect (WIP)" src="https://img.shields.io/badge/AWS%20Solutions%20Architect%20%28WIP%29-6e7681?style=flat-square"></p>
 
 <br/>
 

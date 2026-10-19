@@ -6,8 +6,9 @@
 login = "perochoa"
 name = "Alex Perocho"
 handle = "alex@perochoa"
-location = "Mississauga, ON"
+location = "London, ON"
 website = "https://perochoa.github.io/portfolio/"
+linkedin = "https://www.linkedin.com/in/aperocho/"
 email = "perocho.xela@gmail.com"
 
 [hero]
@@ -15,12 +16,18 @@ title = ["HELLO", "WORLD"]
 # Typed one after another in the hero, then deleted. Keep each under ~40 chars.
 taglines = [
   "i'm confused",
-  "full-stack developer",
-  "writing a chess engine in c++",
-  "shipping .net microservices",
-  "teaching people claude code",
+  "ml platform engineer",
+  "keeping 20+ triton models on sla",
+  "grafana, but multi-tenant",
+  "kubectl get pods -A | grep -v run",
+  "vp @ western csus",
+  "training for my first marathon",
   "still confused, but faster",
 ]
+# Rows in the neofetch window (the rest of its rows are live GitHub numbers). Keep each under ~34 chars.
+role = "ml platform eng @ mobility global"
+school = "b.sc. cs @ western, dec 2026"
+status = "on call, still confused"
 
 [theme]
 accent = "#8b21b5"
@@ -44,12 +51,12 @@ muted = "#59636e"
 [[links]]
 label = "Portfolio"
 url = "https://perochoa.github.io/portfolio/"
-logo = "googlechrome"
+logo = "astro"
 color = "8b21b5"
 
 [[links]]
 label = "LinkedIn"
-url = "https://www.linkedin.com/in/perocho-xela/"
+url = "https://www.linkedin.com/in/aperocho/"
 logo = "linkedin"
 color = "0a66c2"
 
@@ -65,58 +72,135 @@ url = "mailto:perocho.xela@gmail.com"
 logo = "gmail"
 color = "ea4335"
 
+# `$ cat ~/.now` in the console block.
 [now]
-building = "a UCI chess engine in C++ and a gRPC telemetry service in C#"
-learning = "systems design, and how to make agents do the boring parts"
-organizing = "the CSUS Claude Code Workshop 2026"
-ask_me_about = "dotfiles, neovim, or why the banner says i'm confused"
+day_job = "ml platform engineer @ mobility global (s&p global)"
+on_my_plate = "sla alerting for 20+ triton models, telemetry on envoy ai gateway"
+school = "b.sc. computer science @ western, graduating dec 2026"
+side_quest = "vp @ western csus, running workshops (the claude code one is mine)"
+offline = "marathon training, xc mountain biking, guitar (badly)"
+ask_me_about = "grafana multi-tenancy, kubelet eviction, or my dotfiles"
 
-# Badges use shields.io + simple-icons slugs (https://simpleicons.org).
+# Timeline card, newest first. kind = work | lead | school (sets the dot colour).
+[[experience]]
+org = "Mobility Global (S&P Global)"
+role = "ML Platform Engineer, Associate"
+dates = "Sep 2026 – Present"
+kind = "work"
+blurb = "Standardized SLA alerting across 20+ Triton model deployments with one Helm template (Grafana Operator, SNS via ACK, PagerDuty). Moving model telemetry off Python sidecars onto Envoy AI Gateway route metrics."
+
+[[experience]]
+org = "Western CS Undergraduate Society"
+role = "Vice President"
+dates = "Sep 2026 – Present"
+kind = "lead"
+blurb = "Scaled workshops to 4 sessions of 15–30 students, one co-delivered with an OpenAI engineer. Hired 5 directors. Wrote the Claude Code workshop."
+
+[[experience]]
+org = "Mobility Global (S&P Global)"
+role = "ML Platform Engineer Intern"
+dates = "May 2026 – Aug 2026"
+kind = "work"
+blurb = "Fixed kubelet eviction and ephemeral storage across 3 CPU and 4 GPU EKS node classes. Moved 11 tenant orgs onto a standalone Grafana, split out of the LGTM umbrella chart, with zero dashboard loss."
+
+[[experience]]
+org = "CARFAX"
+role = "MLOps Intern"
+dates = "Sep 2025 – Apr 2026"
+kind = "work"
+blurb = "Cut observability overhead 70% by profiling telemetry collectors. Built Grafana multi-tenancy for 8+ orgs (Alloy, Mimir, Loki, Okta RBAC). Got DistilBigBird's FP16 tensors through the Triton broker."
+
+[[experience]]
+org = "Western University"
+role = "B.Sc. Computer Science"
+dates = "Sep 2023 – Dec 2026"
+kind = "school"
+blurb = "AWS Cloud Practitioner, IBM Z (Intermediate and Advanced). AWS Solutions Architect Associate in progress."
+
+[[experience]]
+org = "Long Branch Neighbourhood Association"
+role = "Mobile Front End Developer"
+dates = "May 2020 – Aug 2020"
+kind = "work"
+blurb = "Flutter trail app for a 10,000+ resident community: 2,700+ downloads and a 4.4★ rating across 250+ reviews."
+
+# Bullets under the timeline; markdown is fine here.
+[timeline]
+highlights = [
+  "🏆 [CARFAX Intern Spotlight](https://www.linkedin.com/feed/update/urn:li:activity:7422348823395647488/)",
+  "🎤 [Beyond Autocomplete](https://github.com/perochoa/CSUS_Claude_Code_Workshop_2026): the Claude Code workshop I wrote for CSUS",
+]
+
+# Badges use shields.io + simple-icons slugs (https://simpleicons.org). `url` makes a badge a link.
 [stack]
 languages = [
-  { name = "C#", logo = "dotnet", color = "512bd4" },
-  { name = "C++", logo = "cplusplus", color = "00599c" },
-  { name = "TypeScript", logo = "typescript", color = "3178c6" },
   { name = "Python", logo = "python", color = "3776ab" },
-  { name = "Java", logo = "openjdk", color = "ea2d2e" },
-  { name = "Swift", logo = "swift", color = "f05138" },
+  { name = "Go", logo = "go", color = "00add8" },
+  { name = "C++", logo = "cplusplus", color = "00599c" },
+  { name = "Terraform (HCL)", logo = "terraform", color = "844fba" },
+  { name = "SQL", logo = "postgresql", color = "4169e1" },
+  { name = "PromQL", logo = "prometheus", color = "e6522c" },
+  { name = "Bash", logo = "gnubash", color = "4eaa25" },
 ]
-frameworks = [
-  { name = "ASP.NET Core", logo = "dotnet", color = "512bd4" },
-  { name = ".NET MAUI", logo = "dotnet", color = "512bd4" },
-  { name = "React", logo = "react", color = "087ea4" },
-  { name = "Next.js", logo = "nextdotjs", color = "000000" },
-  { name = "Node.js", logo = "nodedotjs", color = "5fa04e" },
-  { name = "gRPC", logo = "trpc", color = "244c5a" },
-]
-tools = [
-  { name = "Neovim", logo = "neovim", color = "57a143" },
-  { name = "Git", logo = "git", color = "f05032" },
+infrastructure = [
+  { name = "Kubernetes (EKS)", logo = "kubernetes", color = "326ce5" },
+  { name = "AWS", color = "ff9900" },
+  { name = "Karpenter", color = "232f3e" },
+  { name = "Argo CD", logo = "argo", color = "ef7b4d" },
+  { name = "Helm", logo = "helm", color = "0f1689" },
   { name = "Docker", logo = "docker", color = "2496ed" },
-  { name = "AWS", logo = "amazonwebservices", color = "232f3e" },
+]
+observability = [
+  { name = "Grafana", logo = "grafana", color = "f46800" },
+  { name = "Prometheus", logo = "prometheus", color = "e6522c" },
+  { name = "Mimir · Loki · Tempo", logo = "grafana", color = "3a3a3a" },
+  { name = "Alloy", logo = "grafana", color = "f46800" },
+  { name = "OpenTelemetry", logo = "opentelemetry", color = "425cc7" },
+  { name = "PagerDuty", logo = "pagerduty", color = "06ac38" },
+]
+ml_platform = [
+  { name = "NVIDIA Triton", logo = "nvidia", color = "76b900" },
+  { name = "MLflow", logo = "mlflow", color = "0194e2" },
+  { name = "Flyte", color = "6f2aef" },
+  { name = "JupyterHub", logo = "jupyter", color = "f37626" },
+]
+daily_drivers = [
+  { name = "Neovim", logo = "neovim", color = "57a143" },
+  { name = "Ghostty", logo = "ghostty", color = "3551f3" },
   { name = "Claude Code", logo = "claude", color = "d97757" },
+  { name = "Git", logo = "git", color = "f05032" },
+]
+certifications = [
+  { name = "AWS Cloud Practitioner", logo = "credly", color = "ff6b00", url = "https://www.credly.com/badges/8a05268a-9ef4-401c-a40d-7a0e3ed6aa8d/public_url" },
+  { name = "IBM Z Intermediate", logo = "credly", color = "1f70c1", url = "https://www.credly.com/badges/bfaf81ab-2ab2-49be-a9d3-e16a452f552d/public_url" },
+  { name = "IBM Z Advanced", logo = "credly", color = "1f70c1", url = "https://www.credly.com/badges/fa4e0f98-eb48-4086-adbd-65791403c28f/public_url" },
+  { name = "AWS Solutions Architect (WIP)", color = "6e7681" },
 ]
 
-# Repos shown as project cards, in order. `blurb` overrides the repo description.
+# Repos shown as project cards, in order. `blurb` overrides the repo description. Private repos are skipped.
 [[featured]]
 repo = "CSUS_Claude_Code_Workshop_2026"
-blurb = "Workshop material and source for teaching Claude Code at CSUS."
-
-[[featured]]
-repo = "CPPChess"
-
-[[featured]]
-repo = "TelemetryMicroservice"
-
-[[featured]]
-repo = "fomo"
-
-[[featured]]
-repo = "TaskManager"
+blurb = "Beyond Autocomplete: a hands-on Claude Code workshop on a deliberately messy FastAPI app."
 
 [[featured]]
 repo = "dotfiles"
-blurb = "My shell, editor and AI-assistant setup. Shared rules for every coding agent."
+blurb = "Shell, Neovim, Ghostty and shared rules for every AI coding agent I use."
+
+[[featured]]
+repo = "perochoa"
+blurb = "This page. A TOML config, a stdlib Python script and a cron job drawing animated SVGs."
+
+[[featured]]
+repo = "portfolio"
+blurb = "Astro blog and portfolio. The resume on it syncs itself from Google Drive."
+
+[[featured]]
+repo = "CPPChess"
+blurb = "UCI chess engine in C++ with 64-bit bitboards for fast move generation."
+
+[[featured]]
+repo = "TelemetryMicroservice"
+blurb = "Vehicle telemetry over gRPC streaming with Protocol Buffers instead of JSON REST."
 
 [cards.languages]
 top = 8
