@@ -12,7 +12,9 @@ linkedin = "https://www.linkedin.com/in/aperocho/"
 email = "perocho.xela@gmail.com"
 
 [hero]
-title = ["HELLO", "WORLD"]
+# Headline: a small mono greeting over the name (defaults to user.name; set `name` to override) and a subtitle.
+greeting = "hi there, i'm"
+subtitle = "ML platform engineer · CS @ Western"
 # Typed one after another in the hero, then deleted. Keep each under ~40 chars.
 taglines = [
   "i'm confused",

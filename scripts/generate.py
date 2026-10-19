@@ -325,13 +325,20 @@ def hero(cfg: dict, s: dict) -> str:
         ".ln{animation:line .35s ease-out both}"
         "@keyframes float{0%,100%{transform:translateY(0) rotate(2deg)}50%{transform:translateY(-10px) rotate(1deg)}}"
         ".win{transform-box:fill-box;transform-origin:center;animation:float 7s ease-in-out infinite}"
+        "@keyframes rule{from{transform:scaleX(0)}to{transform:none}}"
+        ".rule{transform-box:fill-box;transform-origin:left;animation:rule .9s .5s cubic-bezier(.2,.8,.2,1) both}"
     )
 
-    title = "".join(
-        f'<text class="pop" style="animation-delay:{0.15 + i * 0.2:.2f}s" x="{x0 - 4}" y="{150 + i * 112}"'
-        f' font-family="{HEAVY}" font-size="118" font-weight="900" letter-spacing="2" fill="#fff"'
-        f' filter="url(#shadow)">{esc(word)}</text>'
-        for i, word in enumerate(hero_cfg["title"])
+    # Name-led headline: a small mono greeting, the name, a subtitle, and an accent rule that draws in under them.
+    name = hero_cfg.get("name", user["name"])
+    title = (
+        f'<text class="pop" style="animation-delay:.1s" x="{x0}" y="112" font-family="{MONO}" font-size="20"'
+        f' fill="{p["accent_3"]}">{esc(hero_cfg["greeting"])}</text>'
+        f'<text class="pop" style="animation-delay:.25s" x="{x0 - 3}" y="196" font-family="{SANS}" font-size="84"'
+        f' font-weight="800" letter-spacing="-2" fill="url(#name)" filter="url(#shadow)">{esc(name)}</text>'
+        f'<rect class="rule" x="{x0}" y="222" width="96" height="5" rx="2.5" fill="url(#rule)"/>'
+        f'<text class="pop" style="animation-delay:.45s" x="{x0}" y="266" font-family="{SANS}" font-size="24"'
+        f' font-weight="500" fill="#fff" fill-opacity=".88">{esc(hero_cfg["subtitle"])}</text>'
     )
 
     # neofetch-style window with live numbers
@@ -357,7 +364,7 @@ def hero(cfg: dict, s: dict) -> str:
         lines.append(
             f'<text class="ln" style="animation-delay:{1.3 + i * 0.12:.2f}s" x="{wx + 22}" y="{wy + 106 + i * 22}"'
             f' font-family="{MONO}" font-size="14" fill="{p["fg"]}"><tspan fill="{p["accent_2"]}" font-weight="700">'
-            f'{key:<8}</tspan> {esc(value)}</text>'
+            f'{key}</tspan><tspan x="{wx + 22 + 9 * 14 * MONO_ADVANCE:.1f}">{esc(value)}</tspan></text>'
         )
     swatches = [p["accent"], p["accent_2"], p["accent_3"], "#3fb950", "#58a6ff", p["fg"]]
     lines += [
@@ -380,6 +387,9 @@ def hero(cfg: dict, s: dict) -> str:
         "<defs>"
         f'<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{p["accent"]}"/>'
         f'<stop offset="1" stop-color="{mix(p["accent"], "#000000", 0.45)}"/></linearGradient>'
+        f'<linearGradient id="name" x1="0" y1="0" x2="0" y2="1"><stop offset=".35" stop-color="#fff"/>'
+        f'<stop offset="1" stop-color="{mix("#ffffff", p["accent_2"], 0.3)}"/></linearGradient>'
+        f'<linearGradient id="rule"><stop offset="0" stop-color="{p["accent_3"]}"/><stop offset="1" stop-color="{p["accent_2"]}"/></linearGradient>'
         '<filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="50"/></filter>'
         '<filter id="shadow" x="-10%" y="-10%" width="130%" height="140%">'
         '<feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity=".35"/></filter>'
@@ -399,7 +409,7 @@ def hero(cfg: dict, s: dict) -> str:
         + f'<g class="cur"><rect class="blink" x="{tx + 2:.1f}" y="{y0 - 22}" width="12" height="27" fill="#fff"/></g></g>'
         + window
     )
-    return svg(w, h, body, "".join(css), f"Hello world, I'm {user['name']}")
+    return svg(w, h, body, "".join(css), f"{name}: {hero_cfg['subtitle']}")
 
 
 def stats_card(cfg: dict, s: dict, theme: str) -> str:
@@ -672,7 +682,7 @@ def render_readme(cfg: dict, base: str) -> str:
     user, login = cfg["user"], cfg["user"]["login"]
     profile_url = f"https://github.com/{login}"
     blocks = {}
-    blocks["hero"] = f'<a href="{esc(user["website"])}"><img alt="hello world" src="{base}hero.svg" width="100%"></a>'
+    blocks["hero"] = f'<a href="{esc(user["website"])}"><img alt="{esc(user["name"])}" src="{base}hero.svg" width="100%"></a>'
     blocks["links"] = "\n".join(
         f'<a href="{esc(link["url"])}"><img alt="{esc(link["label"])}" src="{badge(link["label"], link["logo"], link["color"])}"></a>'
         for link in cfg.get("links", [])

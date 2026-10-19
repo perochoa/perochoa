@@ -5,7 +5,7 @@
 
 <div align="center">
 
-<a href="https://perochoa.github.io/portfolio/"><img alt="hello world" src="https://raw.githubusercontent.com/perochoa/perochoa/output/hero.svg" width="100%"></a>
+<a href="https://perochoa.github.io/portfolio/"><img alt="Alex Perocho" src="https://raw.githubusercontent.com/perochoa/perochoa/output/hero.svg" width="100%"></a>
 
 <a href="https://perochoa.github.io/portfolio/"><img alt="Portfolio" src="https://img.shields.io/badge/Portfolio-8b21b5?style=for-the-badge&logo=astro&logoColor=white"></a>
 <a href="https://www.linkedin.com/in/aperocho/"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-0a66c2?style=for-the-badge&logo=linkedin&logoColor=white"></a>
