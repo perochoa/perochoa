@@ -55,7 +55,7 @@ def token() -> str:
         sys.exit("no token: set PROFILE_TOKEN or GITHUB_TOKEN, or log in with `gh auth login`")
 
 
-def graphql(query: str, variables: dict, auth: str) -> dict:
+def graphql(query: str, variables: dict, auth: str, allow_missing: bool = False) -> dict:
     req = urllib.request.Request(
         "https://api.github.com/graphql",
         data=json.dumps({"query": query, "variables": variables}).encode(),
@@ -63,8 +63,13 @@ def graphql(query: str, variables: dict, auth: str) -> dict:
     )
     with urllib.request.urlopen(req, timeout=30) as resp:
         body = json.load(resp)
-    if body.get("errors"):
-        sys.exit(f"graphql error: {body['errors']}")
+    errors = body.get("errors") or []
+    if allow_missing:  # a featured repo that's private to this token or deleted comes back NOT_FOUND
+        for err in (e for e in errors if e.get("type") == "NOT_FOUND"):
+            print(f"warning: {err['message']}", file=sys.stderr)
+        errors = [e for e in errors if e.get("type") != "NOT_FOUND"]
+    if errors:
+        sys.exit(f"graphql error: {errors}")
     return body["data"]
 
 
@@ -125,7 +130,7 @@ def fetch(cfg: dict) -> dict:
         owner, _, name = item["repo"].rpartition("/")
         aliases.append(f'r{i}: repository(owner: "{owner or login}", name: "{name}") {{ {REPO_FIELDS} }}')
     if aliases:
-        repos = graphql(f"query {{ {' '.join(aliases)} }}", {}, auth)
+        repos = graphql(f"query {{ {' '.join(aliases)} }}", {}, auth, allow_missing=True)
         for i, item in enumerate(cfg["featured"]):
             if repos.get(f"r{i}"):
                 featured[item["repo"]] = repos[f"r{i}"]
