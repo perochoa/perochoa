@@ -321,7 +321,13 @@ def hero(cfg: dict, s: dict) -> str:
     css.append("@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}.blink{animation:blink 1s infinite}")
     css.append(
         "@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,30px)}}"
-        ".glow{animation:drift 20s ease-in-out infinite}"
+        "@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(70px,-25px)}}"
+        ".glow{animation:drift 20s ease-in-out infinite}.glow2{animation:drift2 26s ease-in-out infinite}"
+        "@keyframes twinkle{0%,100%{opacity:0}50%{opacity:.9}}.tw{opacity:0;animation:twinkle 5s ease-in-out infinite}"
+        "@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}"
+        ".bob{animation:bob 7s ease-in-out infinite}"
+        "@keyframes ping{0%{transform:scale(1);opacity:.6}80%,100%{transform:scale(3);opacity:0}}"
+        ".ping{transform-box:fill-box;transform-origin:center;animation:ping 2.4s ease-out infinite}"
         "@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}"
         ".rise{animation:rise .7s cubic-bezier(.2,.8,.2,1) both}"
         "@keyframes line{from{opacity:0}to{opacity:1}}.ln{animation:line .4s ease-out both}"
@@ -333,7 +339,8 @@ def hero(cfg: dict, s: dict) -> str:
     name = hero_cfg.get("name", user["name"])
     meta = " · ".join(hero_cfg.get("meta", [user["location"]]))
     title = (
-        f'<g class="rise" style="animation-delay:.05s"><circle class="live" cx="{x0 + 5}" cy="102" r="5" fill="{accent}"/>'
+        f'<g class="rise" style="animation-delay:.05s"><circle class="ping" cx="{x0 + 5}" cy="102" r="5" fill="{accent}"/>'
+        f'<circle cx="{x0 + 5}" cy="102" r="5" fill="{accent}"/>'
         f'<text x="{x0 + 20}" y="107" font-family="{MONO}" font-size="15" letter-spacing=".5" fill="{dim}">{esc(meta.lower())}</text></g>'
         f'<text class="rise" style="animation-delay:.15s" x="{x0 - 3}" y="180" font-family="{SANS}" font-size="68"'
         f' font-weight="700" letter-spacing="-2" fill="{ink}">{esc(name)}</text>'
@@ -368,14 +375,22 @@ def hero(cfg: dict, s: dict) -> str:
             f'{key}</tspan><tspan x="{wx + 24 + 9 * 13.5 * MONO_ADVANCE:.1f}" fill="{dim}">{esc(value)}</tspan></text>'
         )
     window = (
-        f'<g class="rise" style="animation-delay:.5s">'
-        f'<rect x="{wx}" y="{wy}" width="{ww}" height="{wh}" rx="10" fill="#0a0c10" stroke="{faint}"/>'
-        f'<line x1="{wx}" y1="{wy + 38}" x2="{wx + ww}" y2="{wy + 38}" stroke="{faint}" stroke-opacity=".6"/>'
-        + "".join(f'<circle cx="{wx + 20 + i * 16}" cy="{wy + 19}" r="4.5" fill="{faint}"/>' for i in range(3))
+        f'<g class="rise" style="animation-delay:.5s"><g class="bob">'
+        f'<rect x="{wx}" y="{wy}" width="{ww}" height="{wh}" rx="10" fill="#1a1f29" stroke="url(#edge)" filter="url(#lift)"/>'
+        f'<path d="M{wx + 10} {wy + .5}H{wx + ww - 10}A10 10 0 0 1 {wx + ww - .5} {wy + 10}V{wy + 38}H{wx + .5}V{wy + 10}'
+        f'A10 10 0 0 1 {wx + 10} {wy + .5}Z" fill="#222834"/>'
+        f'<line x1="{wx}" y1="{wy + 38}" x2="{wx + ww}" y2="{wy + 38}" stroke="{faint}"/>'
+        + "".join(f'<circle cx="{wx + 20 + i * 16}" cy="{wy + 19}" r="4.5" fill="#4a5260"/>' for i in range(3))
         + f'<text x="{wx + ww / 2}" y="{wy + 24}" text-anchor="middle" font-family="{MONO}" font-size="12"'
         f' fill="{dim}">~/neofetch</text>'
         + "".join(lines)
-        + "</g>"
+        + "</g></g>"
+    )
+    # a few grid crossings that light up in turn, on the side where the grid is visible
+    nodes = [(576, 64), (672, 352), (864, 32), (1152, 96), (1056, 352), (480, 352), (1120, 256), (608, 160), (960, 384)]
+    sparks = "".join(
+        f'<circle class="tw" style="animation-delay:{i * 0.9:.1f}s" cx="{x}" cy="{y}" r="2.5" fill="{accent}" filter="url(#spark)"/>'
+        for i, (x, y) in enumerate(nodes)
     )
 
     body = (
@@ -386,13 +401,20 @@ def hero(cfg: dict, s: dict) -> str:
         '<path d="M32 0H0V32" fill="none" stroke="#fff" stroke-opacity=".035"/></pattern>'
         '<linearGradient id="fade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/>'
         '<stop offset=".55" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff"/></linearGradient>'
+        f'<linearGradient id="edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{accent}" stop-opacity=".45"/>'
+        f'<stop offset=".5" stop-color="{faint}"/><stop offset="1" stop-color="{faint}"/></linearGradient>'
+        '<filter id="lift" x="-20%" y="-20%" width="140%" height="150%">'
+        '<feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity=".5"/></filter>'
+        '<filter id="spark" x="-300%" y="-300%" width="700%" height="700%"><feGaussianBlur stdDeviation="2" result="b"/>'
+        '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
         f'<mask id="gridmask"><rect width="{w}" height="{h}" fill="url(#fade)"/></mask>'
         f'<clipPath id="frame"><rect width="{w}" height="{h}" rx="16"/></clipPath>'
         + "".join(clips)
         + "</defs>"
         f'<g clip-path="url(#frame)"><rect width="{w}" height="{h}" fill="#0d1117"/>'
         f'<rect width="{w}" height="{h}" fill="url(#grid)" mask="url(#gridmask)"/>'
-        f'<g class="glow"><circle cx="980" cy="120" r="380" fill="url(#glow)"/></g></g>'
+        f'<g class="glow"><circle cx="980" cy="120" r="380" fill="url(#glow)"/></g>'
+        f'<g class="glow2"><circle cx="160" cy="420" r="300" fill="url(#glow)" opacity=".7"/></g>' + sparks + "</g>"
         f'<rect x=".5" y=".5" width="{w - 1}" height="{h - 1}" rx="16" fill="none" stroke="{faint}" stroke-opacity=".7"/>'
         + title
         + f'<g class="rise" style="animation-delay:.6s"><text x="{x0}" y="{y0}" font-family="{MONO}" font-size="{font}"'

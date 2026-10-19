@@ -19,14 +19,14 @@ meta = ["London, ON", "Mobility Global"]
 accent = "#c084fc"
 # Typed one after another in the hero, then deleted. Keep each under ~40 chars.
 taglines = [
-  "i'm confused",
-  "ml platform engineer",
+  "building ml platforms on eks",
   "keeping 20+ triton models on sla",
-  "grafana, but multi-tenant",
-  "kubectl get pods -A | grep -v run",
-  "vp @ western csus",
-  "training for my first marathon",
-  "still confused, but faster",
+  "grafana for 11 orgs, 0 dashboards lost",
+  "cut telemetry overhead by 70%",
+  "kubectl get pods -A | grep -v Running",
+  "wrote a claude code workshop",
+  "training for a marathon",
+  "still learning, just faster",
 ]
 # Rows in the neofetch window (the rest of its rows are live GitHub numbers). Keep each under ~34 chars.
 role = "ml platform eng @ mobility global"
