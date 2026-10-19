@@ -25,6 +25,16 @@
 
 </div>
 
+## 🧭 where i've been
+
+<div align="center">
+
+{{experience}}
+
+</div>
+
+{{highlights}}
+
 ## 🛠️ things i've built
 
 <div align="center">

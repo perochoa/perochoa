@@ -69,7 +69,7 @@ def graphql(query: str, variables: dict, auth: str) -> dict:
 
 
 REPO_FIELDS = """
-  name nameWithOwner description url stargazerCount forkCount pushedAt isFork isArchived
+  name nameWithOwner description url stargazerCount forkCount pushedAt isFork isArchived isPrivate
   primaryLanguage { name color }
 """
 
@@ -333,13 +333,13 @@ def hero(cfg: dict, s: dict) -> str:
     top_langs = ", ".join(lang["name"] for lang in s["languages"][:3])
     years = (s["today"] - s["created"]).days // 365
     rows = [
-        ("os", f"human 1.0 ({user['location'].split(',')[0].lower()})"),
-        ("uptime", f"{years} yrs on github"),
+        ("role", hero_cfg["role"]),
+        ("school", hero_cfg["school"]),
         ("langs", top_langs.lower()),
-        ("repos", f"{s['repos']} public, {compact(s['stars'])} ★"),
+        ("github", f"{years} yrs, {s['repos']} public repos"),
         ("commits", f"{s['year_commits']} in the last year"),
         ("streak", f"{s['current_streak']}d now, {s['longest_streak']}d best"),
-        ("status", "confused, but shipping"),
+        ("status", hero_cfg["status"]),
     ]
     wx, wy, ww, wh = 735, 58, 410, 290
     lines = [
@@ -566,6 +566,54 @@ def project_card(cfg: dict, s: dict, item: dict, theme: str) -> str:
     return svg(w, h, "".join(body), style, repo["name"])
 
 
+def experience_card(cfg: dict, s: dict, theme: str) -> str:
+    p = palette(cfg, theme)
+    items = cfg["experience"]
+    w, row = 1000, 80
+    h = 72 + len(items) * row
+    date_x, line_x, text_x = 24, 196, 224
+    kinds = {"work": p["accent"], "lead": p["accent_2"], "school": p["accent_3"]}
+    body = [card_frame(p, w, h, "experience", "◇")]
+    style = (
+        "@keyframes draw{from{transform:scaleY(0)}to{transform:scaleY(1)}}"
+        f".rail{{transform-origin:0 64px;animation:draw 1.4s .1s cubic-bezier(.3,.8,.3,1) both}}"
+        "@keyframes ping{0%{transform:scale(1);opacity:.7}80%,100%{transform:scale(2.6);opacity:0}}"
+        ".ping{transform-box:fill-box;transform-origin:center;animation:ping 2s ease-out infinite}"
+    )
+    body.append(
+        f'<rect class="rail" x="{line_x - 1}" y="64" width="2" height="{h - 64 - row / 2 - 4:.0f}" rx="1" fill="{p["border"]}"/>'
+    )
+    for i, item in enumerate(items):
+        y = 72 + i * row
+        color = kinds.get(item.get("kind", "work"), p["accent"])
+        current = item["dates"].lower().endswith("present")
+        delay = 0.25 + i * 0.12
+        dot = f'<circle cx="{line_x}" cy="{y + 12}" r="6" fill="{color}" stroke="{p["card"]}" stroke-width="3"/>'
+        if current:
+            dot = f'<circle class="ping" cx="{line_x}" cy="{y + 12}" r="6" fill="{color}"/>' + dot
+        lines = wrap(item["blurb"], 112, 2)
+        body.append(
+            f'<g class="in" style="animation-delay:{delay:.2f}s">'
+            f'<text x="{date_x}" y="{y + 16}" font-family="{MONO}" font-size="12" fill="{p["muted"]}">{esc(item["dates"].lower())}</text>'
+            + (
+                f'<rect x="{date_x}" y="{y + 26}" width="38" height="17" rx="8.5" fill="{color}" fill-opacity=".18"/>'
+                f'<text x="{date_x + 19}" y="{y + 38}" text-anchor="middle" font-family="{SANS}" font-size="10" font-weight="700"'
+                f' fill="{color}">now</text>'
+                if current
+                else ""
+            )
+            + dot
+            + f'<text x="{text_x}" y="{y + 17}" font-family="{SANS}" font-size="15" font-weight="700" fill="{p["fg"]}">'
+            f'{esc(item["org"])} <tspan font-weight="400" fill="{p["accent_2"] if theme == "dark" else p["accent"]}">· {esc(item["role"])}</tspan></text>'
+            + "".join(
+                f'<text x="{text_x}" y="{y + 38 + j * 17}" font-family="{SANS}" font-size="12.5" fill="{p["muted"]}">{esc(line)}</text>'
+                for j, line in enumerate(lines)
+            )
+            + "</g>"
+        )
+    return svg(w, h, "".join(body), style, "Experience timeline")
+
+
 def slug(repo: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", repo.lower()).strip("-")
 
@@ -577,12 +625,19 @@ def build_cards(cfg: dict, data: dict, out: Path) -> list[str]:
         files[f"stats-{theme}.svg"] = stats_card(cfg, s, theme)
         files[f"languages-{theme}.svg"] = languages_card(cfg, s, theme)
         files[f"activity-{theme}.svg"] = activity_card(cfg, s, theme)
+        if cfg.get("experience"):
+            files[f"experience-{theme}.svg"] = experience_card(cfg, s, theme)
         for item in cfg.get("featured", []):
-            if item["repo"] in s["featured"]:
+            repo = s["featured"].get(item["repo"])
+            if repo and not repo["isPrivate"]:
                 files[f"project-{slug(item['repo'])}-{theme}.svg"] = project_card(cfg, s, item, theme)
             else:
-                print(f"warning: featured repo {item['repo']} not found, skipping", file=sys.stderr)
+                # a local token can see private repos; never put them on a public card
+                print(f"warning: featured repo {item['repo']} is missing or private, skipping", file=sys.stderr)
     out.mkdir(parents=True, exist_ok=True)
+    for old in out.glob("*.svg"):  # drop cards for repos that were unfeatured or went private
+        if old.name not in files and not old.name.startswith("snake-"):
+            old.unlink()
     for name, content in files.items():
         (out / name).write_text(content)
     return sorted(files)
@@ -604,7 +659,8 @@ def badge(label: str, logo: str, color: str, style: str = "for-the-badge") -> st
     from urllib.parse import quote
 
     text = quote(label.replace("-", "--").replace("_", "__"))
-    return f"https://img.shields.io/badge/{text}-{color}?style={style}&logo={logo}&logoColor=white"
+    logo_args = f"&logo={logo}&logoColor=white" if logo else ""
+    return f"https://img.shields.io/badge/{text}-{color}?style={style}{logo_args}"
 
 
 def render_readme(cfg: dict, base: str) -> str:
@@ -635,6 +691,8 @@ def render_readme(cfg: dict, base: str) -> str:
         + picture(base, "languages", "top languages", "49%", f"{profile_url}?tab=repositories")
     )
     blocks["activity"] = picture(base, "activity", "contribution activity", "100%", profile_url)
+    blocks["experience"] = picture(base, "experience", "experience timeline", "100%", user.get("linkedin"))
+    blocks["highlights"] = "\n".join(f"- {h}" for h in cfg.get("timeline", {}).get("highlights", []))
     cards = [
         picture(base, f"project-{slug(item['repo'])}", item["repo"], "49%", f"https://github.com/{item['repo'] if '/' in item['repo'] else f'{login}/{item['repo']}'}")
         for item in cfg.get("featured", [])
@@ -642,8 +700,13 @@ def render_readme(cfg: dict, base: str) -> str:
     blocks["featured"] = "\n".join(" ".join(cards[i : i + 2]) for i in range(0, len(cards), 2))
     stack_rows = []
     for group, items in cfg.get("stack", {}).items():
-        imgs = " ".join(f'<img alt="{esc(i["name"])}" src="{badge(i["name"], i["logo"], i["color"], "flat-square")}">' for i in items)
-        stack_rows.append(f"<b>{esc(group)}</b><br/>\n{imgs}")
+        imgs = " ".join(
+            (f'<a href="{esc(i["url"])}">{{}}</a>' if i.get("url") else "{}").format(
+                f'<img alt="{esc(i["name"])}" src="{badge(i["name"], i.get("logo", ""), i["color"], "flat-square")}">'
+            )
+            for i in items
+        )
+        stack_rows.append(f"<b>{esc(group.replace('_', ' '))}</b><br/>\n{imgs}")
     blocks["stack"] = "\n\n".join(f"<p>{row}</p>" for row in stack_rows)
     blocks["snake"] = (
         picture(base, "snake", "snake eating my contribution graph", "100%")
