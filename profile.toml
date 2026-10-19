@@ -12,9 +12,11 @@ linkedin = "https://www.linkedin.com/in/aperocho/"
 email = "perocho.xela@gmail.com"
 
 [hero]
-# Headline: a small mono greeting over the name (defaults to user.name; set `name` to override) and a subtitle.
-greeting = "hi there, i'm"
+# Name (defaults to user.name; set `name` to override), a subtitle, and a small mono line above the name.
 subtitle = "ML platform engineer · CS @ Western"
+meta = ["London, ON", "Mobility Global"]
+# The one colour on the banner (pulse dot, prompt, rule, neofetch keys). Defaults to theme.accent_2.
+accent = "#c084fc"
 # Typed one after another in the hero, then deleted. Keep each under ~40 chars.
 taglines = [
   "i'm confused",

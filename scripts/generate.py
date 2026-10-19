@@ -281,13 +281,16 @@ def wrap(text: str, width: int, lines: int) -> list[str]:
 
 
 def hero(cfg: dict, s: dict) -> str:
+    # One banner for both themes: a near-black panel, white type, and the accent used only for small details.
     p = palette(cfg, "dark")
     w, h = 1200, 400
     hero_cfg, user = cfg["hero"], cfg["user"]
+    accent = hero_cfg.get("accent", p["accent_2"])
+    ink, dim, faint = "#f0f3f6", "#9198a1", "#3d444d"
     taglines = hero_cfg["taglines"]
-    font, x0, y0 = 24, 72, 330
+    font, x0, y0 = 20, 72, 318
     char_w = font * MONO_ADVANCE
-    prompt = f"{user['handle']} ~ %"
+    prompt = "$"
     tx = x0 + (len(prompt) + 1) * char_w
 
     # Typewriter: each tagline gets a slot of the loop. A clip rect slides right in character-sized steps to type
@@ -308,38 +311,35 @@ def hero(cfg: dict, s: dict) -> str:
             f"{b:.2f}%,{c:.2f}%{{transform:translateX({lw:.1f}px);{steps}}}",
             f"{d:.2f}%{{transform:translateX(0)}}",
         ]
-        clips.append(f'<clipPath id="c{i}"><rect class="t{i}" x="{tx - lw:.1f}" y="{y0 - 30}" width="{lw:.1f}" height="40"/></clipPath>')
+        clips.append(f'<clipPath id="c{i}"><rect class="t{i}" x="{tx - lw:.1f}" y="{y0 - 26}" width="{lw:.1f}" height="34"/></clipPath>')
         texts.append(
             f'<text clip-path="url(#c{i})" x="{tx:.1f}" y="{y0}" textLength="{lw:.1f}" lengthAdjust="spacing"'
-            f' font-family="{MONO}" font-size="{font}" fill="#fff">{esc(line)}</text>'
+            f' font-family="{MONO}" font-size="{font}" fill="{ink}">{esc(line)}</text>'
         )
     css.append(f"@keyframes cur{{{''.join(cursor)}100%{{transform:translateX(0)}}}}")
     css.append(f".cur{{transform:translateX({len(taglines[0]) * char_w:.1f}px);animation:cur {len(taglines) * 4.2:.1f}s infinite}}")
     css.append("@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}.blink{animation:blink 1s infinite}")
     css.append(
-        "@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-30px)}}"
-        "@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-50px,25px)}}"
-        ".b1{animation:drift 14s ease-in-out infinite}.b2{animation:drift2 18s ease-in-out infinite}"
-        "@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}"
-        ".pop{transform-box:fill-box;transform-origin:center;animation:pop .8s cubic-bezier(.2,.9,.3,1.3) both}"
-        "@keyframes line{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}"
-        ".ln{animation:line .35s ease-out both}"
-        "@keyframes float{0%,100%{transform:translateY(0) rotate(2deg)}50%{transform:translateY(-10px) rotate(1deg)}}"
-        ".win{transform-box:fill-box;transform-origin:center;animation:float 7s ease-in-out infinite}"
+        "@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,30px)}}"
+        ".glow{animation:drift 20s ease-in-out infinite}"
+        "@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}"
+        ".rise{animation:rise .7s cubic-bezier(.2,.8,.2,1) both}"
+        "@keyframes line{from{opacity:0}to{opacity:1}}.ln{animation:line .4s ease-out both}"
         "@keyframes rule{from{transform:scaleX(0)}to{transform:none}}"
-        ".rule{transform-box:fill-box;transform-origin:left;animation:rule .9s .5s cubic-bezier(.2,.8,.2,1) both}"
+        ".rule{transform-box:fill-box;transform-origin:left;animation:rule .9s .45s cubic-bezier(.2,.8,.2,1) both}"
+        "@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}.live{animation:pulse 2.4s ease-in-out infinite}"
     )
 
-    # Name-led headline: a small mono greeting, the name, a subtitle, and an accent rule that draws in under them.
     name = hero_cfg.get("name", user["name"])
+    meta = " · ".join(hero_cfg.get("meta", [user["location"]]))
     title = (
-        f'<text class="pop" style="animation-delay:.1s" x="{x0}" y="112" font-family="{MONO}" font-size="20"'
-        f' fill="{p["accent_3"]}">{esc(hero_cfg["greeting"])}</text>'
-        f'<text class="pop" style="animation-delay:.25s" x="{x0 - 3}" y="196" font-family="{SANS}" font-size="84"'
-        f' font-weight="800" letter-spacing="-2" fill="url(#name)" filter="url(#shadow)">{esc(name)}</text>'
-        f'<rect class="rule" x="{x0}" y="222" width="96" height="5" rx="2.5" fill="url(#rule)"/>'
-        f'<text class="pop" style="animation-delay:.45s" x="{x0}" y="266" font-family="{SANS}" font-size="24"'
-        f' font-weight="500" fill="#fff" fill-opacity=".88">{esc(hero_cfg["subtitle"])}</text>'
+        f'<g class="rise" style="animation-delay:.05s"><circle class="live" cx="{x0 + 5}" cy="102" r="5" fill="{accent}"/>'
+        f'<text x="{x0 + 20}" y="107" font-family="{MONO}" font-size="15" letter-spacing=".5" fill="{dim}">{esc(meta.lower())}</text></g>'
+        f'<text class="rise" style="animation-delay:.15s" x="{x0 - 3}" y="180" font-family="{SANS}" font-size="68"'
+        f' font-weight="700" letter-spacing="-2" fill="{ink}">{esc(name)}</text>'
+        f'<text class="rise" style="animation-delay:.3s" x="{x0}" y="226" font-family="{SANS}" font-size="24"'
+        f' fill="{dim}">{esc(hero_cfg["subtitle"])}</text>'
+        f'<rect class="rule" x="{x0}" y="262" width="40" height="3" rx="1.5" fill="{accent}"/>'
     )
 
     # neofetch-style window with live numbers
@@ -354,60 +354,51 @@ def hero(cfg: dict, s: dict) -> str:
         ("streak", f"{s['current_streak']}d now, {s['longest_streak']}d best"),
         ("status", hero_cfg["status"]),
     ]
-    wx, wy, ww, wh = 735, 58, 410, 290
+    wx, wy, ww, wh = 740, 64, 400, 272
     lines = [
-        f'<text class="ln" style="animation-delay:1.1s" x="{wx + 22}" y="{wy + 62}" font-family="{MONO}" font-size="15"'
-        f' font-weight="700" fill="{p["accent_3"]}">{esc(user["handle"])}</text>',
-        f'<text class="ln" style="animation-delay:1.2s" x="{wx + 22}" y="{wy + 80}" font-family="{MONO}" font-size="15"'
-        f' fill="{p["muted"]}">{"─" * len(user["handle"])}</text>',
+        f'<text class="ln" style="animation-delay:.9s" x="{wx + 24}" y="{wy + 66}" font-family="{MONO}" font-size="14"'
+        f' font-weight="700" fill="{ink}">{esc(user["handle"])}</text>',
+        f'<rect class="ln" style="animation-delay:.95s" x="{wx + 24}" y="{wy + 78}" width="{len(user["handle"]) * 14 * MONO_ADVANCE:.1f}"'
+        f' height="1" fill="{faint}"/>',
     ]
     for i, (key, value) in enumerate(rows):
         lines.append(
-            f'<text class="ln" style="animation-delay:{1.3 + i * 0.12:.2f}s" x="{wx + 22}" y="{wy + 106 + i * 22}"'
-            f' font-family="{MONO}" font-size="14" fill="{p["fg"]}"><tspan fill="{p["accent_2"]}" font-weight="700">'
-            f'{key}</tspan><tspan x="{wx + 22 + 9 * 14 * MONO_ADVANCE:.1f}">{esc(value)}</tspan></text>'
+            f'<text class="ln" style="animation-delay:{1.0 + i * 0.1:.2f}s" x="{wx + 24}" y="{wy + 106 + i * 22}"'
+            f' font-family="{MONO}" font-size="13.5" fill="{ink}"><tspan fill="{accent}">'
+            f'{key}</tspan><tspan x="{wx + 24 + 9 * 13.5 * MONO_ADVANCE:.1f}" fill="{dim}">{esc(value)}</tspan></text>'
         )
-    swatches = [p["accent"], p["accent_2"], p["accent_3"], "#3fb950", "#58a6ff", p["fg"]]
-    lines += [
-        f'<rect class="ln" style="animation-delay:{2.3 + i * 0.05:.2f}s" x="{wx + 22 + i * 26}" y="{wy + wh - 34}"'
-        f' width="22" height="12" rx="3" fill="{c}"/>'
-        for i, c in enumerate(swatches)
-    ]
     window = (
-        f'<g class="pop" style="animation-delay:.7s"><g class="win">'
-        f'<rect x="{wx}" y="{wy}" width="{ww}" height="{wh}" rx="14" fill="{p["bg"]}" fill-opacity=".92"'
-        f' stroke="#ffffff" stroke-opacity=".18" filter="url(#shadow)"/>'
-        + "".join(f'<circle cx="{wx + 22 + i * 18}" cy="{wy + 22}" r="5.5" fill="{c}"/>' for i, c in enumerate(("#ff5f57", "#febc2e", "#28c840")))
-        + f'<text x="{wx + ww / 2}" y="{wy + 27}" text-anchor="middle" font-family="{MONO}" font-size="12"'
-        f' fill="{p["muted"]}">~/neofetch</text>'
+        f'<g class="rise" style="animation-delay:.5s">'
+        f'<rect x="{wx}" y="{wy}" width="{ww}" height="{wh}" rx="10" fill="#0a0c10" stroke="{faint}"/>'
+        f'<line x1="{wx}" y1="{wy + 38}" x2="{wx + ww}" y2="{wy + 38}" stroke="{faint}" stroke-opacity=".6"/>'
+        + "".join(f'<circle cx="{wx + 20 + i * 16}" cy="{wy + 19}" r="4.5" fill="{faint}"/>' for i in range(3))
+        + f'<text x="{wx + ww / 2}" y="{wy + 24}" text-anchor="middle" font-family="{MONO}" font-size="12"'
+        f' fill="{dim}">~/neofetch</text>'
         + "".join(lines)
-        + "</g></g>"
+        + "</g>"
     )
 
     body = (
         "<defs>"
-        f'<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{p["accent"]}"/>'
-        f'<stop offset="1" stop-color="{mix(p["accent"], "#000000", 0.45)}"/></linearGradient>'
-        f'<linearGradient id="name" x1="0" y1="0" x2="0" y2="1"><stop offset=".35" stop-color="#fff"/>'
-        f'<stop offset="1" stop-color="{mix("#ffffff", p["accent_2"], 0.3)}"/></linearGradient>'
-        f'<linearGradient id="rule"><stop offset="0" stop-color="{p["accent_3"]}"/><stop offset="1" stop-color="{p["accent_2"]}"/></linearGradient>'
-        '<filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="50"/></filter>'
-        '<filter id="shadow" x="-10%" y="-10%" width="130%" height="140%">'
-        '<feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity=".35"/></filter>'
-        '<pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">'
-        '<circle cx="2" cy="2" r="1.2" fill="#fff" fill-opacity=".12"/></pattern>'
-        f'<clipPath id="frame"><rect width="{w}" height="{h}" rx="22"/></clipPath>'
+        f'<radialGradient id="glow"><stop offset="0" stop-color="{accent}" stop-opacity=".16"/>'
+        f'<stop offset="1" stop-color="{accent}" stop-opacity="0"/></radialGradient>'
+        '<pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">'
+        '<path d="M32 0H0V32" fill="none" stroke="#fff" stroke-opacity=".035"/></pattern>'
+        '<linearGradient id="fade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/>'
+        '<stop offset=".55" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff"/></linearGradient>'
+        f'<mask id="gridmask"><rect width="{w}" height="{h}" fill="url(#fade)"/></mask>'
+        f'<clipPath id="frame"><rect width="{w}" height="{h}" rx="16"/></clipPath>'
         + "".join(clips)
         + "</defs>"
-        f'<g clip-path="url(#frame)"><rect width="{w}" height="{h}" fill="url(#bg)"/>'
-        f'<g class="b1"><circle cx="980" cy="60" r="160" fill="{p["accent_2"]}" fill-opacity=".55" filter="url(#blur)"/></g>'
-        f'<g class="b2"><circle cx="260" cy="380" r="170" fill="{p["accent_3"]}" fill-opacity=".35" filter="url(#blur)"/></g>'
-        f'<rect width="{w}" height="{h}" fill="url(#dots)"/></g>'
+        f'<g clip-path="url(#frame)"><rect width="{w}" height="{h}" fill="#0d1117"/>'
+        f'<rect width="{w}" height="{h}" fill="url(#grid)" mask="url(#gridmask)"/>'
+        f'<g class="glow"><circle cx="980" cy="120" r="380" fill="url(#glow)"/></g></g>'
+        f'<rect x=".5" y=".5" width="{w - 1}" height="{h - 1}" rx="16" fill="none" stroke="{faint}" stroke-opacity=".7"/>'
         + title
-        + f'<g class="pop" style="animation-delay:.6s"><text x="{x0}" y="{y0}" font-family="{MONO}" font-size="{font}"'
-        f' fill="{p["accent_3"]}" textLength="{len(prompt) * char_w:.1f}" lengthAdjust="spacing">{esc(prompt)}</text>'
+        + f'<g class="rise" style="animation-delay:.6s"><text x="{x0}" y="{y0}" font-family="{MONO}" font-size="{font}"'
+        f' fill="{accent}">{esc(prompt)}</text>'
         + "".join(texts)
-        + f'<g class="cur"><rect class="blink" x="{tx + 2:.1f}" y="{y0 - 22}" width="12" height="27" fill="#fff"/></g></g>'
+        + f'<g class="cur"><rect class="blink" x="{tx + 2:.1f}" y="{y0 - 18}" width="10" height="23" fill="{accent}"/></g></g>'
         + window
     )
     return svg(w, h, body, "".join(css), f"{name}: {hero_cfg['subtitle']}")
