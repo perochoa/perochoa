@@ -205,6 +205,7 @@ def summarize(cfg: dict, data: dict) -> dict:
         "year_prs": recent["totalPullRequestContributions"],
         "year_issues": recent["totalIssueContributions"],
         "year_total": recent["contributionCalendar"]["totalContributions"],
+        "active_days": sum(1 for wk in recent["contributionCalendar"]["weeks"] for d in wk["contributionDays"] if d["contributionCount"]),
         "weeks": recent["contributionCalendar"]["weeks"],
         "current_streak": current,
         "longest_streak": longest,
@@ -420,7 +421,7 @@ def stats_card(cfg: dict, s: dict, theme: str) -> str:
         ("commits", compact(s["year_commits"]), "past year"),
         ("pull requests", compact(s["year_prs"]), "past year"),
         ("issues", compact(s["year_issues"]), "past year"),
-        ("stars earned", compact(s["stars"]), "all repos"),
+        ("active days", compact(s["active_days"]), "past year"),
         ("followers", compact(s["followers"]), f"{s['repos']} public repos"),
     ]
     body = [card_frame(p, w, h, "github stats", "▲")]
@@ -450,7 +451,8 @@ def stats_card(cfg: dict, s: dict, theme: str) -> str:
         f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{p["border"]}" stroke-width="9"/>'
         f'<circle class="ring" cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="url(#rg)" stroke-width="9"'
         f' stroke-linecap="round" transform="rotate(-90 {cx} {cy})"/>'
-        f'<text class="fire" x="{cx}" y="{cy - r - 6}" text-anchor="middle" font-size="18">🔥</text>'
+        f'<path class="fire" transform="translate({cx - 8} {cy - r - 26})" fill="url(#rg)"'
+        ' d="M8 0C9 4 14 6 14 11.5A6 6 0 0 1 2 11.5C2 8.5 4 7 4.5 5C6 6.5 6 8 6 8C7.5 6 8 3.5 8 0Z"/>'
         f'<g class="in" style="animation-delay:.5s"><text x="{cx}" y="{cy + 8}" text-anchor="middle" font-family="{SANS}"'
         f' font-size="32" font-weight="800" fill="{p["fg"]}">{s["current_streak"]}</text>'
         f'<text x="{cx}" y="{cy + 26}" text-anchor="middle" font-family="{SANS}" font-size="11" fill="{p["muted"]}">day streak</text></g>'
@@ -572,7 +574,9 @@ def project_card(cfg: dict, s: dict, item: dict, theme: str) -> str:
     body.append(
         f'<g class="in" style="animation-delay:.3s"><circle cx="30" cy="{h - 24}" r="6" fill="{lang["color"] or p["muted"]}"/>'
         f'<text x="42" y="{h - 20}" font-family="{SANS}" font-size="12" fill="{p["muted"]}">{esc(lang["name"])}'
-        f'    ★ {compact(repo["stargazerCount"])}    ⑂ {compact(repo["forkCount"])}</text></g>'
+        + (f'    ★ {compact(repo["stargazerCount"])}' if repo["stargazerCount"] else "")
+        + (f'    ⑂ {compact(repo["forkCount"])}' if repo["forkCount"] else "")
+        + "</text></g>"
     )
     style = (
         "@keyframes edge{from{transform:scaleY(0)}to{transform:scaleY(1)}}"
@@ -748,6 +752,7 @@ def write_preview(cfg: dict, out: Path) -> Path:
     body = re.sub(r"^## (.*)$", r"<h2>\1</h2>", body, flags=re.M)
     body = re.sub(r"^- (.*)$", r"<li>\1</li>", body, flags=re.M)
     body = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", body)
+    body = re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", r'<a href="\2">\1</a>', body)
     page = (
         "<!doctype html><meta charset=utf-8><title>profile preview</title>"
         "<style>body{background:#0d1117;color:#e6edf3;font:16px -apple-system,sans-serif;max-width:1012px;margin:24px auto;padding:0 16px}"
