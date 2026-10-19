@@ -1,0 +1,132 @@
+# Profile config. Everything on the README comes from here.
+# Edit, then run `python scripts/generate.py --readme` and commit README.md.
+# The cards (SVGs) are rebuilt daily by .github/workflows/profile.yml.
+
+[user]
+login = "perochoa"
+name = "Alex Perocho"
+handle = "alex@perochoa"
+location = "Mississauga, ON"
+website = "https://perochoa.github.io/portfolio/"
+email = "perocho.xela@gmail.com"
+
+[hero]
+title = ["HELLO", "WORLD"]
+# Typed one after another in the hero, then deleted. Keep each under ~40 chars.
+taglines = [
+  "i'm confused",
+  "full-stack developer",
+  "writing a chess engine in c++",
+  "shipping .net microservices",
+  "teaching people claude code",
+  "still confused, but faster",
+]
+
+[theme]
+accent = "#8b21b5"
+accent_2 = "#ff3068"
+accent_3 = "#f8d866"
+
+[theme.dark]
+bg = "#0d1117"
+card = "#161b22"
+border = "#30363d"
+fg = "#e6edf3"
+muted = "#8d96a0"
+
+[theme.light]
+bg = "#ffffff"
+card = "#f6f8fa"
+border = "#d0d7de"
+fg = "#1f2328"
+muted = "#59636e"
+
+[[links]]
+label = "Portfolio"
+url = "https://perochoa.github.io/portfolio/"
+logo = "googlechrome"
+color = "8b21b5"
+
+[[links]]
+label = "LinkedIn"
+url = "https://www.linkedin.com/in/perocho-xela/"
+logo = "linkedin"
+color = "0a66c2"
+
+[[links]]
+label = "Instagram"
+url = "https://www.instagram.com/perocho.xela/"
+logo = "instagram"
+color = "e4405f"
+
+[[links]]
+label = "Email"
+url = "mailto:perocho.xela@gmail.com"
+logo = "gmail"
+color = "ea4335"
+
+[now]
+building = "a UCI chess engine in C++ and a gRPC telemetry service in C#"
+learning = "systems design, and how to make agents do the boring parts"
+organizing = "the CSUS Claude Code Workshop 2026"
+ask_me_about = "dotfiles, neovim, or why the banner says i'm confused"
+
+# Badges use shields.io + simple-icons slugs (https://simpleicons.org).
+[stack]
+languages = [
+  { name = "C#", logo = "dotnet", color = "512bd4" },
+  { name = "C++", logo = "cplusplus", color = "00599c" },
+  { name = "TypeScript", logo = "typescript", color = "3178c6" },
+  { name = "Python", logo = "python", color = "3776ab" },
+  { name = "Java", logo = "openjdk", color = "ea2d2e" },
+  { name = "Swift", logo = "swift", color = "f05138" },
+]
+frameworks = [
+  { name = "ASP.NET Core", logo = "dotnet", color = "512bd4" },
+  { name = ".NET MAUI", logo = "dotnet", color = "512bd4" },
+  { name = "React", logo = "react", color = "087ea4" },
+  { name = "Next.js", logo = "nextdotjs", color = "000000" },
+  { name = "Node.js", logo = "nodedotjs", color = "5fa04e" },
+  { name = "gRPC", logo = "trpc", color = "244c5a" },
+]
+tools = [
+  { name = "Neovim", logo = "neovim", color = "57a143" },
+  { name = "Git", logo = "git", color = "f05032" },
+  { name = "Docker", logo = "docker", color = "2496ed" },
+  { name = "AWS", logo = "amazonwebservices", color = "232f3e" },
+  { name = "Claude Code", logo = "claude", color = "d97757" },
+]
+
+# Repos shown as project cards, in order. `blurb` overrides the repo description.
+[[featured]]
+repo = "CSUS_Claude_Code_Workshop_2026"
+blurb = "Workshop material and source for teaching Claude Code at CSUS."
+
+[[featured]]
+repo = "CPPChess"
+
+[[featured]]
+repo = "TelemetryMicroservice"
+
+[[featured]]
+repo = "fomo"
+
+[[featured]]
+repo = "TaskManager"
+
+[[featured]]
+repo = "dotfiles"
+blurb = "My shell, editor and AI-assistant setup. Shared rules for every coding agent."
+
+[cards.languages]
+top = 8
+# Bytes alone let one big Java assignment drown everything else; blend in repo count.
+size_weight = 0.4
+count_weight = 0.6
+exclude = ["Nunjucks", "Makefile", "AIDL", "Ruby", "HTML", "CSS"]
+
+[cards.activity]
+weeks = 53
+
+[cards.snake]
+enabled = true
