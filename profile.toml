@@ -202,10 +202,6 @@ blurb = "Astro blog and portfolio. The resume on it syncs itself from Google Dri
 repo = "CPPChess"
 blurb = "UCI chess engine in C++ with 64-bit bitboards for fast move generation."
 
-[[featured]]
-repo = "TelemetryMicroservice"
-blurb = "Vehicle telemetry over gRPC streaming with Protocol Buffers instead of JSON REST."
-
 [cards.languages]
 top = 8
 # Bytes alone let one big Java assignment drown everything else; blend in repo count.
