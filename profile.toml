@@ -182,7 +182,8 @@ certifications = [
 ]
 
 # Repos shown as project cards, in order. `blurb` overrides the repo description.
-# Entries for deleted or private repos are removed by the hourly `sync` job (or `generate.py --sync`).
+# The hourly `sync` job (or `generate.py --sync`) appends every public non-fork repo that isn't here yet,
+# and removes entries for deleted or private repos. To keep a repo off, list it in cards.projects.exclude.
 [[featured]]
 repo = "dotfiles"
 blurb = "Shell, Neovim, Ghostty and shared rules for every AI coding agent I use."
@@ -205,6 +206,10 @@ top = 8
 size_weight = 0.4
 count_weight = 0.6
 exclude = ["Nunjucks", "Makefile", "AIDL", "Ruby", "HTML", "CSS"]
+
+[cards.projects]
+# Public repos `sync` never adds as featured. Removing an entry above isn't enough: it would be re-added.
+exclude = []
 
 [cards.activity]
 weeks = 53

@@ -5,7 +5,7 @@
     python scripts/generate.py --cached      # reuse dist/data.json instead of calling the API
     python scripts/generate.py --readme      # render README.md (no network)
     python scripts/generate.py --check       # exit 1 if README.md is out of date with the config
-    python scripts/generate.py --sync        # drop deleted/private featured repos from the config, re-render README.md
+    python scripts/generate.py --sync        # drop deleted/private featured repos, add new public non-fork ones, re-render README.md
     python scripts/generate.py --preview     # also write dist/preview.html, wired to the local cards
 
 Token: $PROFILE_TOKEN, then $GITHUB_TOKEN, then `gh auth token`. Stdlib only (Python 3.11+).
@@ -150,16 +150,46 @@ def fetch_featured(cfg: dict, auth: str) -> dict:
     return featured
 
 
-def sync(cfg: dict) -> list[str]:
-    """Drop [[featured]] entries whose repo is gone or private from profile.toml; return the dropped names.
+OWN_REPOS_QUERY = """
+query($login: String!, $after: String) {
+  user(login: $login) {
+    repositories(ownerAffiliations: OWNER, privacy: PUBLIC, isFork: false, first: 100, after: $after,
+                 orderBy: {field: PUSHED_AT, direction: DESC}) {
+      pageInfo { hasNextPage endCursor }
+      nodes { name }
+    }
+  }
+}
+"""
+
+
+def own_public_repos(login: str, auth: str) -> list[str]:
+    """Names of the user's public, non-fork repos, most recently pushed first."""
+    names, after = [], None
+    while True:
+        page = graphql(OWN_REPOS_QUERY, {"login": login, "after": after}, auth)["user"]["repositories"]
+        names += [node["name"] for node in page["nodes"]]
+        if not page["pageInfo"]["hasNextPage"]:
+            return names
+        after = page["pageInfo"]["endCursor"]
+
+
+def sync(cfg: dict) -> tuple[list[str], list[str]]:
+    """Drop [[featured]] entries whose repo is gone or private, and append public non-fork repos that
+    aren't featured yet, in profile.toml; return the dropped and added names.
 
     The README links a card per featured repo but cards are only drawn for public ones, so a deleted repo
-    leaves a broken image until its entry goes.
+    leaves a broken image until its entry goes. `cards.projects.exclude` keeps a repo from being added.
     """
-    found = fetch_featured(cfg, token())
+    auth, login = token(), cfg["user"]["login"]
+    found = fetch_featured(cfg, auth)
     stale = [item["repo"] for item in cfg.get("featured", []) if item["repo"] not in found or found[item["repo"]]["isPrivate"]]
-    if not stale:
-        return []
+    # a featured repo is matched by `name` or `owner/name`
+    have = {item["repo"].removeprefix(f"{login}/").lower() for item in cfg.get("featured", [])}
+    skip = {name.lower() for name in cfg.get("cards", {}).get("projects", {}).get("exclude", [])}
+    new = [name for name in own_public_repos(login, auth) if name.lower() not in have | skip]
+    if not stale and not new:
+        return [], []
     text = CONFIG.read_text()
 
     def drop(m: re.Match) -> str:
@@ -167,12 +197,18 @@ def sync(cfg: dict) -> list[str]:
         return "" if repo in stale else m.group(0)
 
     # an entry runs from its [[featured]] header to the next blank line or table header
-    text = re.sub(r"^\[\[featured\]\]\n(?:(?!\[|\s*\n).*\n)*\n*", drop, text, flags=re.M)
+    entry = re.compile(r"^\[\[featured\]\]\n(?:(?!\[|\s*\n).*\n)*\n*", flags=re.M)
+    text = entry.sub(drop, text)
+    if new:
+        added = "".join(f'[[featured]]\nrepo = "{name}"\n\n' for name in new)
+        entries = list(entry.finditer(text))
+        at = entries[-1].end() if entries else len(text)
+        text = text[:at] + ("\n" if at and not text[:at].endswith("\n\n") else "") + added + text[at:]
     left = [item["repo"] for item in tomllib.loads(text).get("featured", [])]
-    if left != [item["repo"] for item in cfg["featured"] if item["repo"] not in stale]:
-        sys.exit(f"sync: couldn't cleanly drop {stale} from {CONFIG.name}; edit it by hand")
+    if left != [item["repo"] for item in cfg.get("featured", []) if item["repo"] not in stale] + new:
+        sys.exit(f"sync: couldn't cleanly update featured repos in {CONFIG.name} (drop {stale}, add {new}); edit it by hand")
     CONFIG.write_text(text.rstrip("\n") + "\n")
-    return stale
+    return stale, new
 
 
 def streaks(days: dict[str, int], today: dt.date) -> tuple[int, int]:
@@ -813,7 +849,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--readme", action="store_true", help="render README.md and exit")
     ap.add_argument("--check", action="store_true", help="fail if README.md is stale")
-    ap.add_argument("--sync", action="store_true", help="drop featured repos that aren't public, then render README.md")
+    ap.add_argument("--sync", action="store_true", help="drop featured repos that aren't public, add public non-fork ones, then render README.md")
     ap.add_argument("--cached", action="store_true", help="use dist/data.json instead of the API")
     ap.add_argument("--preview", action="store_true", help="also write dist/preview.html")
     ap.add_argument("--out", type=Path, default=DIST)
@@ -821,8 +857,11 @@ def main() -> None:
     cfg = tomllib.loads(CONFIG.read_text())
 
     if args.sync:
-        for repo in sync(cfg):
+        dropped, added = sync(cfg)
+        for repo in dropped:
             print(f"dropped featured repo {repo}: deleted or private")
+        for repo in added:
+            print(f"added featured repo {repo}")
         cfg = tomllib.loads(CONFIG.read_text())
         args.readme = True
 
