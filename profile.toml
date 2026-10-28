@@ -200,6 +200,15 @@ blurb = "Astro blog and portfolio. The resume on it syncs itself from Google Dri
 repo = "CPPChess"
 blurb = "UCI chess engine in C++ with 64-bit bitboards for fast move generation."
 
+[[featured]]
+repo = "csus-event-hub-handouts"
+
+[[featured]]
+repo = "csus-event-hub"
+
+[[featured]]
+repo = "cs4472-group6-a1"
+
 [cards.languages]
 top = 8
 # Bytes alone let one big Java assignment drown everything else; blend in repo count.
