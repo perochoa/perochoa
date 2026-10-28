@@ -132,7 +132,7 @@ blurb = "Flutter trail app for a 10,000+ resident community: 2,700+ downloads an
 [timeline]
 highlights = [
   "[CARFAX Intern Spotlight](https://www.linkedin.com/feed/update/urn:li:activity:7422348823395647488/)",
-  "[Beyond Autocomplete](https://github.com/perochoa/CSUS_Claude_Code_Workshop_2026), the Claude Code workshop I wrote for CSUS",
+  "[Beyond Autocomplete](https://github.com/perochoa/csus-event-hub-handouts), the Claude Code workshop I wrote for CSUS",
 ]
 
 # Badges use shields.io + simple-icons slugs (https://simpleicons.org). `url` makes a badge a link.
@@ -181,11 +181,8 @@ certifications = [
   { name = "AWS Solutions Architect (WIP)", color = "6e7681" },
 ]
 
-# Repos shown as project cards, in order. `blurb` overrides the repo description. Private repos are skipped.
-[[featured]]
-repo = "CSUS_Claude_Code_Workshop_2026"
-blurb = "Beyond Autocomplete: a hands-on Claude Code workshop on a deliberately messy FastAPI app."
-
+# Repos shown as project cards, in order. `blurb` overrides the repo description.
+# Entries for deleted or private repos are removed by the hourly `sync` job (or `generate.py --sync`).
 [[featured]]
 repo = "dotfiles"
 blurb = "Shell, Neovim, Ghostty and shared rules for every AI coding agent I use."
