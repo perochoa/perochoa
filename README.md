@@ -48,7 +48,7 @@ ask me about: grafana multi-tenancy, kubelet eviction, or my dotfiles
 </div>
 
 - [CARFAX Intern Spotlight](https://www.linkedin.com/feed/update/urn:li:activity:7422348823395647488/)
-- [Beyond Autocomplete](https://github.com/perochoa/CSUS_Claude_Code_Workshop_2026), the Claude Code workshop I wrote for CSUS
+- [Beyond Autocomplete](https://github.com/perochoa/csus-event-hub-handouts), the Claude Code workshop I wrote for CSUS
 
 ## Projects
 
