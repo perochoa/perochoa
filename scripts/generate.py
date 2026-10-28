@@ -5,6 +5,7 @@
     python scripts/generate.py --cached      # reuse dist/data.json instead of calling the API
     python scripts/generate.py --readme      # render README.md (no network)
     python scripts/generate.py --check       # exit 1 if README.md is out of date with the config
+    python scripts/generate.py --sync        # drop deleted/private featured repos from the config, re-render README.md
     python scripts/generate.py --preview     # also write dist/preview.html, wired to the local cards
 
 Token: $PROFILE_TOKEN, then $GITHUB_TOKEN, then `gh auth token`. Stdlib only (Python 3.11+).
@@ -124,6 +125,18 @@ def fetch(cfg: dict) -> dict:
         auth,
     )["user"]["contributionsCollection"]
 
+    return {
+        "fetched_at": now.isoformat(),
+        "user": user,
+        "years": contrib["user"],
+        "recent": recent,
+        "featured": fetch_featured(cfg, auth),
+    }
+
+
+def fetch_featured(cfg: dict, auth: str) -> dict:
+    """Featured repos by config name; deleted (or hidden from this token) repos are left out."""
+    login = cfg["user"]["login"]
     featured = {}
     aliases = []
     for i, item in enumerate(cfg.get("featured", [])):
@@ -134,14 +147,32 @@ def fetch(cfg: dict) -> dict:
         for i, item in enumerate(cfg["featured"]):
             if repos.get(f"r{i}"):
                 featured[item["repo"]] = repos[f"r{i}"]
+    return featured
 
-    return {
-        "fetched_at": now.isoformat(),
-        "user": user,
-        "years": contrib["user"],
-        "recent": recent,
-        "featured": featured,
-    }
+
+def sync(cfg: dict) -> list[str]:
+    """Drop [[featured]] entries whose repo is gone or private from profile.toml; return the dropped names.
+
+    The README links a card per featured repo but cards are only drawn for public ones, so a deleted repo
+    leaves a broken image until its entry goes.
+    """
+    found = fetch_featured(cfg, token())
+    stale = [item["repo"] for item in cfg.get("featured", []) if item["repo"] not in found or found[item["repo"]]["isPrivate"]]
+    if not stale:
+        return []
+    text = CONFIG.read_text()
+
+    def drop(m: re.Match) -> str:
+        repo = tomllib.loads(m.group(0).replace("[[featured]]", "", 1)).get("repo")
+        return "" if repo in stale else m.group(0)
+
+    # an entry runs from its [[featured]] header to the next blank line or table header
+    text = re.sub(r"^\[\[featured\]\]\n(?:(?!\[|\s*\n).*\n)*\n*", drop, text, flags=re.M)
+    left = [item["repo"] for item in tomllib.loads(text).get("featured", [])]
+    if left != [item["repo"] for item in cfg["featured"] if item["repo"] not in stale]:
+        sys.exit(f"sync: couldn't cleanly drop {stale} from {CONFIG.name}; edit it by hand")
+    CONFIG.write_text(text.rstrip("\n") + "\n")
+    return stale
 
 
 def streaks(days: dict[str, int], today: dt.date) -> tuple[int, int]:
@@ -782,11 +813,18 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--readme", action="store_true", help="render README.md and exit")
     ap.add_argument("--check", action="store_true", help="fail if README.md is stale")
+    ap.add_argument("--sync", action="store_true", help="drop featured repos that aren't public, then render README.md")
     ap.add_argument("--cached", action="store_true", help="use dist/data.json instead of the API")
     ap.add_argument("--preview", action="store_true", help="also write dist/preview.html")
     ap.add_argument("--out", type=Path, default=DIST)
     args = ap.parse_args()
     cfg = tomllib.loads(CONFIG.read_text())
+
+    if args.sync:
+        for repo in sync(cfg):
+            print(f"dropped featured repo {repo}: deleted or private")
+        cfg = tomllib.loads(CONFIG.read_text())
+        args.readme = True
 
     if args.readme or args.check:
         rendered = render_readme(cfg, raw_base(cfg))
