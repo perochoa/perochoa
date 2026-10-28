@@ -1,10 +1,11 @@
 name: profile
 
 # Cards and the snake are pushed to the orphan `output` branch, which README.md reads from raw.githubusercontent.com.
-# Nothing here commits to main.
+# The only commits to main come from `sync`, when a featured repo was deleted or made private.
 on:
   schedule:
-    - cron: "17 6 * * *"
+    - cron: "17 6 * * *" # cards
+    - cron: "47 * * * *" # sync only
   push:
     branches: [main]
   pull_request:
@@ -18,6 +19,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # A deleted repo has no card, so its entry would leave a broken image on the README: drop it and re-render.
+  sync:
+    name: drop deleted featured repos
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - run: python scripts/generate.py --sync
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: commit if anything was dropped
+        run: |
+          git diff --quiet -- profile.toml README.md && exit 0
+          git add profile.toml README.md
+          git -c user.name=github-actions[bot] -c user.email=41898282+github-actions[bot]@users.noreply.github.com \
+            commit -q -m "sync: drop deleted or private featured repos"
+          git push -q origin HEAD:main
+
   readme:
     name: readme is in sync with profile.toml
     runs-on: ubuntu-latest
@@ -30,7 +56,7 @@ jobs:
 
   cards:
     name: draw cards
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && github.event.schedule != '47 * * * *'
     needs: readme
     runs-on: ubuntu-latest
     permissions:
