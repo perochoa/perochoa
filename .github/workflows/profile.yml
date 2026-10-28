@@ -1,7 +1,8 @@
 name: profile
 
 # Cards and the snake are pushed to the orphan `output` branch, which README.md reads from raw.githubusercontent.com.
-# The only commits to main come from `sync`, when a featured repo was deleted or made private.
+# The only commits to main come from `sync`, when a featured repo was deleted or made private, or a new public
+# non-fork repo appeared. Its pushes don't trigger workflows, so `cards` runs right after it changes anything.
 on:
   schedule:
     - cron: "17 6 * * *" # cards
@@ -20,12 +21,15 @@ concurrency:
 
 jobs:
   # A deleted repo has no card, so its entry would leave a broken image on the README: drop it and re-render.
+  # New public non-fork repos are appended as featured.
   sync:
-    name: drop deleted featured repos
+    name: sync featured repos
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -36,13 +40,15 @@ jobs:
       - run: python scripts/generate.py --sync
         env:
           GITHUB_TOKEN: ${{ github.token }}
-      - name: commit if anything was dropped
+      - name: commit if anything changed
+        id: commit
         run: |
           git diff --quiet -- profile.toml README.md && exit 0
           git add profile.toml README.md
           git -c user.name=github-actions[bot] -c user.email=41898282+github-actions[bot]@users.noreply.github.com \
-            commit -q -m "sync: drop deleted or private featured repos"
+            commit -q -m "sync: update featured repos"
           git push -q origin HEAD:main
+          echo changed=true >> "$GITHUB_OUTPUT"
 
   readme:
     name: readme is in sync with profile.toml
@@ -56,13 +62,19 @@ jobs:
 
   cards:
     name: draw cards
-    if: github.event_name != 'pull_request' && github.event.schedule != '47 * * * *'
-    needs: readme
+    # sync is skipped on pull requests and may fail; neither should stop the daily cards
+    if: >-
+      !cancelled() && needs.readme.result == 'success' && github.event_name != 'pull_request'
+      && (github.event.schedule != '47 * * * *' || needs.sync.outputs.changed == 'true')
+    needs: [readme, sync]
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      # the branch head, not the triggering commit, so a profile.toml that sync just pushed gets its cards
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref }}
       - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
