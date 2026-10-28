@@ -209,6 +209,9 @@ repo = "csus-event-hub"
 [[featured]]
 repo = "cs4472-group6-a1"
 
+[[featured]]
+repo = "perocho-er"
+
 [cards.languages]
 top = 8
 # Bytes alone let one big Java assignment drown everything else; blend in repo count.
