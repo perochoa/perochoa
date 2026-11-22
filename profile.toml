@@ -215,6 +215,9 @@ repo = "perocho-er"
 [[featured]]
 repo = "perocho-repairs"
 
+[[featured]]
+repo = "cs4472-group6-a2"
+
 [cards.languages]
 top = 8
 # Bytes alone let one big Java assignment drown everything else; blend in repo count.
